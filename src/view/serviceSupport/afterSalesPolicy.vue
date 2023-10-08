@@ -8,13 +8,13 @@
       </div>
       <div class="menu">
         <ul>
-          <li @click="setShow(true)">售后政策</li>
-          <li @click="setShow(false)">操作指南</li>
+          <li @click="setShow(1)" :class="1 == show ? 'active' : ''">售后政策</li>
+          <li @click="setShow(2)" :class="2 == show ? 'active' : ''">操作指南</li>
         </ul>
       </div>
     </div>
     <div class="single_wrapper">
-      <div class="single_center" v-if="show">
+      <div class="single_center" v-if="show === 1">
         <div class="about_con">售后服务承诺书</div>
         <div class="about_text">
           <div class="text til">尊敬的客户:</div>
@@ -93,15 +93,30 @@
         </div>
       </div>
 
-      <div class="instruction" v-else>
+      <div class="instruction" v-if="show === 2">
         <div class="til">
           <div class="left">文件名称</div>
         </div>
         <div class="body">
           <div class="text">
-            <span class="left">操作指南.docx</span>
-            <span class="right" @click="download()">下载</span>
-            <span class="look" @click="look()">预览</span>
+            <span class="left">IP&4G话筒说明书（P10）.docx</span>
+            <span class="right" @click="download('IP&4G话筒说明书（P10）.docx')">下载</span>
+            <!-- <span class="look" @click="look('IP&4G话筒说明书（P10）.docx')">预览</span> -->
+          </div>
+          <div class="text">
+            <span class="left">壁挂广播音箱说明书（Y11）.docx</span>
+            <span class="right" @click="download('壁挂广播音箱说明书（Y11）.docx')">下载</span>
+            <!-- <span class="look" @click="look('壁挂广播音箱说明书（Y11）.docx')">预览</span> -->
+          </div>
+          <div class="text">
+            <span class="left">云收扩机说明书-(S20).doc</span>
+            <span class="right" @click="download('云收扩机说明书-(S20).doc')">下载</span>
+            <!-- <span class="look" @click="look('云收扩机说明书-(S20).doc')">预览</span> -->
+          </div>
+          <div class="text">
+            <span class="left">智能音柱说明书（Y22）.doc</span>
+            <span class="right" @click="download('智能音柱说明书（Y22）.doc')">下载</span>
+            <!-- <span class="look" @click="look('智能音柱说明书（Y22）.doc')">预览</span> -->
           </div>
         </div>
       </div>
@@ -110,16 +125,27 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { ref, onMounted, onBeforeUnmount, getCurrentInstance } from 'vue'
+const cxt = getCurrentInstance()
+const bus = cxt.appContext.config.globalProperties.$bus // 事件总线
+const show = ref(1)
+const url = import.meta.env.VITE_APP_URL
 
-const show = ref(true)
+onMounted(() => {
+  bus.on('serviceSupport', (data) => {
+    setShow(data)
+  })
+})
+
 function setShow (data) {
   show.value = data
+  console.log(show._value);
 }
 function download (data) {
-  console.log(data);
+  window.open(`${url}${data}`)
 }
 function look (data) {
+  https://view.officeapps.live.com/op/view.aspx?src=
   console.log(data);
 }
 </script>
@@ -127,9 +153,15 @@ function look (data) {
 <style scoped lang="less">
 .sub_banner {
   width: 100%;
-  height: 400px;
+  height: 330px;
   position: relative;
   overflow: hidden;
+
+  img {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+  }
 
   .tit {
     color: #fff;
@@ -159,7 +191,7 @@ function look (data) {
     line-height: 64px;
     z-index: 10;
     font-size: 18px;
-    background-color: rgba(30, 132, 198, .7);
+    background-color: rgba(30, 132, 198, .8);
     color: #fff;
 
     ul {
@@ -181,27 +213,33 @@ function look (data) {
   }
 }
 
+.active {
+  background-color: rgb(30, 132, 198);
+  font-weight: bold;
+}
+
 .single_wrapper {
+  background-color: rgb(248, 248, 248);
   padding: 100px 0;
 
   .single_center {
+    background-color: #fff;
     width: 1200px;
     margin: 0 auto;
-    border: 1px solid rgb(162, 160, 160);
 
     .about_con {
       text-align: center;
       text-indent: 24px;
       white-space: normal;
       font-size: 18px;
-      margin: 30px 0;
+      padding: 30px 0;
       font-weight: 700;
       font-size: 24px;
     }
 
     .about_text {
       white-space: pre;
-      padding: 0 5px;
+      padding: 0 40px 60px 40px;
 
       .text {
         width: 100%;

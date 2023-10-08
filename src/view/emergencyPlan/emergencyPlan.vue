@@ -1,173 +1,3 @@
-<template>
-  <div class="">
-    <div class="sub_banner">
-      <img src="@/assets/img/technology.jpg" mode="widthfix">
-      <div class="tit">
-        <span>应急方案</span>
-        <p></p>
-      </div>
-    </div>
-    <div class="case_main">
-      <div class="title">行业解决方案</div>
-      <div class="body1">
-        <ul class="clearfix">
-          <li v-for="(item, index) in proposalDocument.scenarioType" :class="showClick === index ? 'box-color' : ''"
-            :key="index" @click="toTarget(index, true)">
-            <div>
-              <img src="../../assets/img/bg.jpg">
-              <h3>
-                {{ item.name }}
-                <i class="icon"></i>
-              </h3>
-            </div>
-          </li>
-        </ul>
-      </div>
-      <div class="case_1" id="target" ref="target">
-        <div class="case_tit">
-          <h3>{{ moduleName }}</h3>
-        </div>
-        <div class="body">
-          <div class="fl">
-            <h3>场景需求</h3>
-          </div>
-          <div class="fr">
-            {{ sceneData }}
-          </div>
-        </div>
-        <div class="clear"></div>
-
-      </div>
-
-      <div class="case_2">
-        <div class="case_tit">
-          <h3>拓扑图</h3>
-        </div>
-        <div class="body2">
-          <img :src="getImgUrl(topoImgData, 'png')">
-        </div>
-      </div>
-
-      <div class="case_3">
-        <div class="case_tit">
-          <h3>方案特点</h3>
-        </div>
-        <div class="body3">
-          <ul class="clearfix">
-            <li v-for="(item, index) in programData" :key="index">
-              <h3>{{ item.title }}</h3>
-              <p>
-                {{ item.text }}
-              </p>
-              <i class="icon"></i>
-            </li>
-          </ul>
-        </div>
-      </div>
-      <div class="audioAndVideos">
-        <swiper v-if="cImgData.length > 0" navigation loop autoplay :slides-per-view="1" :space-between="0"
-          :modules="modules" :pagination="{ clickable: true }" ref="mySwiper" id="mySwiper" utoplay>
-          <swiper-slide v-for="item in cImgData" :key="item.id" class="swiper-container">
-            <img class="image" :src="getImgUrl(item.imgs, 'jpg')" alt="" v-if="item.type == 1">
-            <video :src="getImgUrl(item.imgs, 'mp4')" @play="stopSwiper" @pause="startSwiper" ref="video"
-              style="z-index: 999;" controls v-if="item.type == 2" />
-            <div class="swiper-slide-title">
-              <h1></h1>
-              <!-- <p>{{ item.text }}</p> -->
-            </div>
-          </swiper-slide>
-        </swiper>
-      </div>
-    </div>
-  </div>
-</template>
-
-<script setup>
-import { ref, reactive, onMounted, onBeforeUnmount, getCurrentInstance } from 'vue';
-// import Swiper from 'swiper';
-
-import { Swiper, SwiperSlide } from 'swiper/vue'
-import { Navigation, Pagination, Scrollbar, A11y, Lazy, Autoplay } from 'swiper'
-import 'swiper/css'
-import 'swiper/css/navigation'
-import 'swiper/css/pagination'
-import 'swiper/css/scrollbar'
-import 'swiper/css/lazy'
-import 'swiper/css/autoplay'
-
-const modules = [Navigation, Pagination, Scrollbar, A11y, Lazy, Autoplay]
-
-// 导入并初始化数据
-import proposalDocument from '../data-statistical/proposal-document'
-
-const moduleName = ref('校园广播')
-const showClick = ref(0)
-const topoImgData = ref([])
-const sceneData = ref('')
-const programData = ref([])
-const cImgData = ref([])
-
-const cxt = getCurrentInstance()
-const bus = cxt.appContext.config.globalProperties.$bus // 事件总线
-import banner1 from '@/assets/img/banner1.png'
-
-const swiperOption = ref({})
-onMounted(() => {
-  // 初始化页面数据
-  const data = proposalDocument.scenarioType[0]
-  toTarget(0)
-  bus.on('emergencyPlan', (index) => {
-    toTarget(index)
-  })
-})
-
-onBeforeUnmount(() => {
-  bus.off('emergencyPlan')
-})
-
-// ----------------  点击滚动到内容  ----------------
-// name场景名称 num下标 topoImg拓扑图 scene场景 program方案特点 cImg案例图
-function toTarget (index, value) {
-  const proData = proposalDocument.scenarioType[index]
-  moduleName.value = proData.name
-  showClick.value = index
-  topoImgData.value = proData.topologyImg
-  sceneData.value = proData.scenarioRequirements
-  // ------方案特点赋值start-----
-  const textArray = proData.programFeatures.split('\n');
-  programData.value = textArray.map((text, index) => {
-    const parts = text.split('：'); // 按冒号分割每行文本
-    const trimmedData = parts.map(item => item.trim());
-    if (trimmedData.length === 2) {
-      const title = trimmedData[0].replace(/^\d+、/, '').trim(); // 去除行首的数字和点
-      const textContent = trimmedData[1].trim();
-      return { title, text: textContent };
-    }
-    return { title: '', text: text.trim() };
-  });
-  programData.value.pop()
-  // ------方案特点赋值 end -----------
-  cImgData.value = proData.caseImg
-  // 滚动
-  if (value) { document.getElementById("target").scrollIntoView({ behavior: 'smooth' }); }
-}
-// 动态导入图片
-const getImgUrl = (src, val) => {
-  return new URL(`../../assets/img/${src}.${val}`, import.meta.url).href;
-};
-
-const mySwiper = ref(null);
-// 播放视频就停止轮播
-const stopSwiper = () => {
-  mySwiper.value?.$el.swiper.autoplay.stop()
-};
-// 暂停视频就开始轮播
-const startSwiper = () => {
-  mySwiper.value?.$el.swiper.autoplay.start()
-};
-
-</script>
-
 <style scoped lang="less">
 .sub_banner {
   width: 100%;
@@ -463,6 +293,187 @@ const startSwiper = () => {
         }
       }
     }
+  }
+}
+</style>
+
+<template>
+  <div class="">
+    <div class="sub_banner">
+      <img src="@/assets/img/technology.jpg" mode="widthfix">
+      <div class="tit">
+        <span>应用方案</span>
+        <p></p>
+      </div>
+    </div>
+    <div class="case_main">
+      <div class="title">场景应用方案</div>
+      <div class="body1">
+        <ul class="clearfix">
+          <li v-for="(item, index) in proposalDocument.scenarioType" :class="showClick === index ? 'box-color' : ''"
+            :key="index" @click="toTarget(index, true)">
+            <div>
+              <img src="../../assets/img/bg.jpg">
+              <h3>
+                {{ item.name }}
+                <i class="icon"></i>
+              </h3>
+            </div>
+          </li>
+        </ul>
+      </div>
+      <div class="case_1" id="target" ref="target">
+        <div class="case_tit">
+          <h3>{{ moduleName }}</h3>
+        </div>
+        <div class="body">
+          <div class="fl">
+            <h3>场景需求</h3>
+          </div>
+          <div class="fr">
+            {{ sceneData }}
+          </div>
+        </div>
+        <div class="clear"></div>
+
+      </div>
+
+      <div class="case_2">
+        <div class="case_tit">
+          <h3>拓扑图</h3>
+        </div>
+        <div class="body2">
+          <img :src="getImgUrl(topoImgData, 'png')">
+        </div>
+      </div>
+
+      <div class="case_3">
+        <div class="case_tit">
+          <h3>方案特点</h3>
+        </div>
+        <div class="body3">
+          <ul class="clearfix">
+            <li v-for="(item, index) in programData" :key="index">
+              <h3>{{ item.title }}</h3>
+              <p>
+                {{ item.text }}
+              </p>
+              <i class="icon"></i>
+            </li>
+          </ul>
+        </div>
+      </div>
+      <div class="audioAndVideos">
+        <swiper v-if="cImgData.length > 0" navigation loop autoplay :slides-per-view="1" :space-between="0"
+          :modules="modules" :pagination="{ clickable: true }" ref="mySwiper" id="mySwiper" utoplay>
+          <swiper-slide v-for="item in cImgData" :key="item.id" class="swiper-container">
+            <img class="image" :src="getImgUrl(item.imgs, 'jpg')" alt="" v-if="item.type == 1">
+            <video :src="getImgUrl(item.imgs, 'mp4')" @play="stopSwiper" @pause="startSwiper" ref="video"
+              style="z-index: 999;" controls v-if="item.type == 2" />
+            <div class="swiper-slide-title">
+              <h1></h1>
+              <!-- <p>{{ item.text }}</p> -->
+            </div>
+          </swiper-slide>
+        </swiper>
+      </div>
+    </div>
+  </div>
+</template>
+
+<script setup>
+import { ref, reactive, onMounted, onBeforeUnmount, getCurrentInstance } from 'vue';
+// import Swiper from 'swiper';
+
+import { Swiper, SwiperSlide } from 'swiper/vue'
+import { Navigation, Pagination, Scrollbar, A11y, Lazy, Autoplay } from 'swiper'
+import 'swiper/css'
+import 'swiper/css/navigation'
+import 'swiper/css/pagination'
+import 'swiper/css/scrollbar'
+import 'swiper/css/lazy'
+import 'swiper/css/autoplay'
+
+const modules = [Navigation, Pagination, Scrollbar, A11y, Lazy, Autoplay]
+
+// 导入并初始化数据
+import proposalDocument from '../data-statistical/proposal-document'
+
+const moduleName = ref('校园广播')
+const showClick = ref(0)
+const topoImgData = ref([])
+const sceneData = ref('')
+const programData = ref([])
+const cImgData = ref([])
+
+const cxt = getCurrentInstance()
+const bus = cxt.appContext.config.globalProperties.$bus // 事件总线
+onMounted(() => {
+  // 初始化页面数据
+  const data = proposalDocument.scenarioType[0]
+  toTarget(0)
+  bus.on('emergencyPlan', (index) => {
+    toTarget(index)
+  })
+})
+
+onBeforeUnmount(() => {
+  bus.off('emergencyPlan')
+})
+
+// ----------------  点击滚动到内容  ----------------
+// name场景名称 num下标 topoImg拓扑图 scene场景 program方案特点 cImg案例图
+function toTarget (index, value) {
+  const proData = proposalDocument.scenarioType[index]
+  moduleName.value = proData.name
+  showClick.value = index
+  topoImgData.value = proData.topologyImg
+  sceneData.value = proData.scenarioRequirements
+  // ------方案特点赋值start-----
+  const textArray = proData.programFeatures.split('\n');
+  programData.value = textArray.map((text, index) => {
+    const parts = text.split('：'); // 按冒号分割每行文本
+    const trimmedData = parts.map(item => item.trim());
+    if (trimmedData.length === 2) {
+      const title = trimmedData[0].replace(/^\d+、/, '').trim(); // 去除行首的数字和点
+      const textContent = trimmedData[1].trim();
+      return { title, text: textContent };
+    }
+    return { title: '', text: text.trim() };
+  });
+  programData.value.pop()
+  // ------方案特点赋值 end -----------
+  cImgData.value = proData.caseImg
+  // 滚动
+  if (value) { document.getElementById("target").scrollIntoView({ behavior: 'smooth' }); }
+}
+// 动态导入图片
+const getImgUrl = (src, val) => {
+  return new URL(`../../assets/img/${src}.${val}`, import.meta.url).href;
+};
+
+const mySwiper = ref(null);
+// 播放视频就停止轮播
+const stopSwiper = () => {
+  mySwiper.value?.$el.swiper.autoplay.stop()
+};
+// 暂停视频就开始轮播
+const startSwiper = () => {
+  mySwiper.value?.$el.swiper.autoplay.start()
+};
+
+</script>
+<style scoped lang="less">
+.sub_banner {
+  width: 100%;
+  height: 330px;
+  position: relative;
+  overflow: hidden;
+
+  img {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
   }
 }
 </style>

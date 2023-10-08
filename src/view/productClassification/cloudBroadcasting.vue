@@ -3,7 +3,7 @@
     <div class="sub_banner">
       <img src="@/assets/img/technology.jpg" mode="widthfix">
       <div class="tit">
-        <span>产品中心</span>
+        <span>产品分类</span>
         <p>技术引领未来，守护美好生活</p>
       </div>
     </div>
@@ -72,7 +72,7 @@ import img_3 from '@/assets/img/img_3.png'
 import img_4 from '@/assets/img/img_4.png'
 import img_5 from '@/assets/img/img_5.png'
 import img_6 from '@/assets/img/img_6.png'
-import img_7 from '@/assets/img/img_7(1).png'
+import img_7 from '@/assets/img/img_7.png'
 import img_8 from '@/assets/img/img_8.png'
 import img_9 from '@/assets/img/img_9.png'
 import img_10 from '@/assets/img/img_10.png'
@@ -91,7 +91,6 @@ const bus = cxt.appContext.config.globalProperties.$bus
 onMounted(() => {
   bus.on('productClassification', (index) => {
     onClick(index)
-    console.log(index);
   })
 })
 
@@ -103,7 +102,6 @@ let link = ref(1)
 const router = useRouter()
 
 function onClick (num) {
-  console.log(num);
   link.value = num
 }
 const terminal = reactive([
@@ -133,9 +131,15 @@ function routerClick (val, num) {
 <style scoped lang="less">
 .sub_banner {
   width: 100%;
-  height: 400px;
+  height: 330px;
   position: relative;
   overflow: hidden;
+
+  img {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+  }
 
   .tit {
     color: #fff;

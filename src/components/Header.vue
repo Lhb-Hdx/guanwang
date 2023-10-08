@@ -17,8 +17,8 @@
     <div class="header-nav container hidden-xs">
       <!-- 导航logo -->
       <div @click="goHomePage" class="header-nav-logo">
-        <img src="@/assets/img/favicon2.png" />
-        <div class="header-nav-name">泛予</div>
+        <img src="@/assets/img/logo.png" />
+        <!-- <div class="header-nav-name">泛予智联</div> -->
 
       </div>
 
@@ -40,6 +40,7 @@
           </div> -->
         </li>
       </ul>
+      <!-- <div class="glyphicon glyphicon-earphone"></div> 服务电话：{{ phone }} -->
     </div>
     <!-- 手机导航 -->
     <div class="header-nav-m container-fuild visible-xs">
@@ -64,6 +65,7 @@
         </ul>
       </div>
     </div>
+    <div class="glyphicon glyphicon-earphone"> 服务电话：133-0296-4863</div>
   </div>
 </template>
 
@@ -120,7 +122,7 @@ const navList = [
     ]
   },
   {
-    name: '应急方案',
+    name: '应用方案',
     path: '/emergencyPlan',
     children: [
       {
@@ -218,11 +220,21 @@ function goHomePage () {
 }
 </script>
 
-<style scoped>
+<style scoped lang="less">
 /* 顶部 */
 #header {
   background: #fff;
   transition: all ease 0.6s;
+  position: relative;
+
+  .glyphicon {
+    position: absolute;
+    right: 90px;
+    top: 21px;
+    line-height: 40px;
+    z-index: 100;
+    font-size: 16px;
+  }
 }
 
 #header .header-top {
@@ -241,6 +253,9 @@ function goHomePage () {
 /* 导航栏 */
 #header .header-nav {
   height: 80px;
+  position: relative;
+
+
 }
 
 /* 导航栏logo */
@@ -254,8 +269,8 @@ function goHomePage () {
 
 /* 导航栏logo图片 */
 #header .header-nav .header-nav-logo img {
-  width: 45px;
-  height: 45px;
+  width: 160px;
+  height: 60px;
   position: absolute;
   top: 0;
   left: 0;

@@ -15,7 +15,7 @@
           <dd><span @click="routerClick(1, 'productClassification', 3)">主机及服务器</span></dd>
         </dl>
         <dl>
-          <dt><span @click="routerClick(2, 'emergencyPlan')">应急方案</span></dt>
+          <dt><span @click="routerClick(2, 'emergencyPlan')">应用方案</span></dt>
           <dd><span @click="routerClick(2, 'emergencyPlan', 0)">校园广播</span></dd>
           <dd><span @click="routerClick(2, 'emergencyPlan', 1)">园区广播</span></dd>
           <dd><span @click="routerClick(2, 'emergencyPlan', 2)">商铺广播</span></dd>
@@ -25,17 +25,16 @@
         </dl>
         <dl>
           <dt><span @click="routerClick(3, 'serviceSupport')">服务支持</span></dt>
-          <dd><span @click="routerClick(3, 'serviceSupport')">售后政策</span></dd>
-          <dd><span @click="routerClick(3, 'serviceSupport')">操作指南</span></dd>
-          <dd><span @click="routerClick(3, 'serviceSupport')">联系方式</span></dd>
+          <dd><span @click="routerClick(3, 'serviceSupport', true)">售后政策</span></dd>
+          <dd><span @click="routerClick(3, 'serviceSupport', false)">操作指南</span></dd>
         </dl>
         <dl>
           <dt><span @click="routerClick(4, 'aboutFanYu')">关于泛予</span></dt>
-          <dd><span @click="routerClick(4, 'aboutFanYu')">公司简介</span></dd>
+          <!-- <dd><span @click="routerClick(4, 'aboutFanYu')">公司简介</span></dd>
           <dd><span @click="routerClick(4, 'aboutFanYu')">发展历程</span></dd>
           <dd><span @click="routerClick(4, 'aboutFanYu')">荣誉资质</span></dd>
           <dd><span @click="routerClick(4, 'aboutFanYu')">社会责任</span></dd>
-          <dd><span @click="routerClick(4, 'aboutFanYu')">联系方式</span></dd>
+          <dd><span @click="routerClick(4, 'aboutFanYu')">联系方式</span></dd> -->
         </dl>
       </div>
       <div class="right">
@@ -53,9 +52,9 @@
   </div>
   <div class="bottom_copy">
     <div class="w1200">
-      <div class="left">深圳泛予智能科技有限公司 &nbsp; &nbsp;&nbsp;&nbsp;
-        <span>营业执照 &nbsp; &nbsp;&nbsp;&nbsp;</span>
-        <span>123123123132</span>
+      <div class="left">深圳市泛予科技有限公司 &nbsp; &nbsp;&nbsp;&nbsp;
+        <span>邮箱：14035892@qq.com &nbsp; &nbsp;&nbsp;&nbsp;</span>
+        <span>地址：深圳市南山区南油第四工业区7栋707</span>
       </div>
     </div>
   </div>

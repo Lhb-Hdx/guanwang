@@ -12,6 +12,8 @@ import {
 import './assets/css/reset.min.css'
 
 // import 'jquery'
+import ElementPlus from 'element-plus'
+// import 'element-plus/lib/theme-chalk/index.css'
 
 import './assets/css/bootstrap.min.css'
 import './assets/js/bootstrap.min.js'
@@ -33,4 +35,4 @@ import * as utilTool from '@/utils/utils'
 
 app.config.globalProperties.$tool = utilTool
 
-app.use(VueAwesomeSwiper).use(router).mount('#app')
+app.use(VueAwesomeSwiper).use(router).use(ElementPlus).mount('#app')

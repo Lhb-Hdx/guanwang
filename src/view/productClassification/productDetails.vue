@@ -80,9 +80,11 @@ import { Autoplay, FreeMode, Navigation, Pagination, Thumbs, Scrollbar } from 's
 const modules = [Autoplay, FreeMode, Thumbs, Scrollbar, Navigation, Pagination]
 
 
+
+
 // 初始化数据
 // 产品类型和编号 link=1 云广播 link=2 前端产品 link=3 主机及服务器
-import describe from './data-statistical/params'
+import describe from '@/view/data-statistical/params'
 const router = useRouter()
 const title = ref('')
 const introduction = ref('') // 简介
@@ -91,30 +93,41 @@ const parameters = ref('') // 参数
 const img = ref([]) // 图片
 
 onMounted(() => {
+  GoTop()
   const link = router.currentRoute.value.query.link;
   const number = router.currentRoute.value.query.number;
-  title.value = describe.statementType[+link].statement[number - 1].label
+  const val = describe.statementType[+link].statement[number - 1]
+  title.value = val.label
   // 简介
-  introduction.value = describe.statementType[+link].statement[number - 1].productIntroduction
+  introduction.value = val.productIntroduction
   // 详情
-  details.value = describe.statementType[+link].statement[number - 1].productDetails
-  console.log(details._value);
+  details.value = val.productDetails
   // 参数
-  parameters.value = describe.statementType[+link].statement[number - 1].ProductParameters
+  parameters.value = val.ProductParameters
   // 图片
-  img.value.push(describe.statementType[+link].statement[number - 1].img)
+  img.value.push(val.img)
 })
+
+function GoTop () {
+  (function smoothscroll () {
+    var currentScroll =
+      document.documentElement.scrollTop || document.body.scrollTop
+    if (currentScroll > 535) {
+      window.requestAnimationFrame(smoothscroll)
+      window.scrollTo(0, currentScroll - currentScroll / 10)
+    }
+  })()
+}
 
 // 动态导入图片
 const getImgUrl = (src) => {
-  return new URL(`../assets/img/${src}.png`, import.meta.url).href;
+  return new URL(`../../assets/img/${src}.png`, import.meta.url).href;
 };
 
 // 点击缩略图
 let borColor = ref(0)
 function handleThumbnailClick (num) {
   borColor.value = num
-  console.log(borColor.value);
 }
 // 点击下一张
 function advance () {
@@ -141,7 +154,6 @@ const TitleData = reactive([
 let link = ref(1)
 function onClick (num) {
   link.value = num
-  console.log(link._value);
 }
 
 // 鼠标移入事件
@@ -160,9 +172,15 @@ function mouseOverFunction (num) {
 
 .sub_banner {
   width: 100%;
-  height: 400px;
+  height: 330px;
   position: relative;
   overflow: hidden;
+
+  img {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+  }
 
   .tit {
     color: #fff;
